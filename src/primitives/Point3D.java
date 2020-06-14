@@ -8,7 +8,9 @@ import static java.lang.Math.sqrt;
  * Point3D class for representing a point in 3D environment
  */
 public class Point3D {
-
+    Coordinate _x;
+    Coordinate _y;
+    Coordinate _z;
 /*******************Constructor*****************/
     /**
      *
@@ -30,9 +32,7 @@ public class Point3D {
             new Coordinate(other._head._z));}
 
     public Point3D(Point3D other){this._x=other._x;this._y=other._y;this._z=other._z;}
-    Coordinate _x;
-    Coordinate _y;
-    Coordinate _z;
+
     public static Point3D ZERO=new Point3D(new Coordinate(0.0),new Coordinate(0.0),new Coordinate(0.0));
 
 
@@ -47,10 +47,18 @@ public class Point3D {
         return new Coordinate(_x);
     }
 
+    /**
+     * returns y
+     * @return Coordinate
+     */
     public Coordinate get_y() {
         return new Coordinate(_y);
     }
 
+    /**
+     * returns z
+     * @return Coordinate
+     */
     public Coordinate get_z() {
         return new Coordinate(_z);
     }

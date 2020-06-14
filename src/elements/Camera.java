@@ -6,12 +6,15 @@ import primitives.Vector;
 
 import java.awt.*;
 
+/**
+ * Camera class for setting point of ray projection,from which rays will be sent through view plane to intersect geometries
+ */
 public class Camera {
     Point3D _p0;
     Vector _vUp;
     Vector _vTo;
     Vector _vRight;
-
+//getters/////////////////////////////
     public Point3D get_p0() {
         return _p0;
     }
@@ -24,6 +27,12 @@ public class Camera {
         return _vTo;
     }
 
+    /**
+     * constructor to initialize point of projections and vectors vTo,vUp,vRight
+     * @param _p0
+     * @param _vUp
+     * @param _vTo
+     */
     public Camera(Point3D _p0, Vector _vUp, Vector _vTo) {
         this._p0 = _p0;
         try{if(_vUp.normalize().dotProduct(_vTo)!=0)
@@ -31,6 +40,18 @@ public class Camera {
         this._vTo = _vTo.normalize();
         this._vRight=_vTo.crossProduct(_vUp).normalize();}catch(IllegalArgumentException e){}
     }
+
+    /**
+     * function to enable ray that hits a pixel in the view plane
+     * @param nX
+     * @param nY
+     * @param j
+     * @param i
+     * @param screenDistance
+     * @param screenWidth
+     * @param screenHeight
+     * @return
+     */
     public Ray constructRayThroughPixel(int nX,
                                         int nY,
                                         int j,

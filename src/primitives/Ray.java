@@ -13,6 +13,7 @@ import java.util.Objects;
 public class Ray {
     Point3D _p0;
     Vector _dir;
+    double DELTA=0.01;
 
     /**
      * function that returns point of origin (p0)
@@ -51,6 +52,18 @@ public class Ray {
         if(_dir.length()!=1)
         {this._dir=_dir.normalize();}
         this._dir = _dir;
+    }
+
+    /**
+     * constructor for secondary rays
+     * @param _p0
+     * @param _dir
+     * @param _normal
+     */
+    public Ray(Point3D _p0,Vector _dir,Vector _normal)
+    {
+        this._p0=_p0.add(_normal.scale(DELTA)).get_head();
+        this._dir=_dir;
     }
 
     public void getPoint3D(double t) {

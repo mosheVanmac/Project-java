@@ -1,8 +1,6 @@
 package geometries;
 
-import primitives.Point3D;
-import primitives.Ray;
-import primitives.Vector;
+import primitives.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -10,11 +8,48 @@ import java.util.Objects;
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
-public class Cylinder extends Tube implements Geometry {
-    double _height;
+public class Cylinder extends Tube  {
+        double _height;
+
+    /**
+     *
+     * @param he
+     */
     public Cylinder(double he){super(0.0,new Ray(new Point3D(1,2,3),new Vector(4,5,6)));_height = he;}
-    public double get_height() {
-        return _height;
+
+    /**
+     *
+     * @param _radius
+     * @param _axisRay
+     * @param _height
+     */
+    public Cylinder(double _radius, Ray _axisRay, double _height) {
+        this(Color.BLACK,new Material(0,0,0),_radius,_axisRay,_height);
+    }
+
+    /**
+     * constructor
+     * @param material
+     * @param _radius
+     * @param _axisRay
+     * @param _height
+     */
+    public Cylinder(Material material, double _radius, Ray _axisRay, double _height) {
+        this(Color.BLACK,material, _radius, _axisRay,_height);
+
+    }
+
+    /**
+     * constructor
+     * @param color
+     * @param material
+     * @param _radius
+     * @param _axisRay
+     * @param _height
+     */
+    public Cylinder(Color color, Material material, double _radius, Ray _axisRay, double _height) {
+        super(color, material, _radius, _axisRay);
+        this._height = _height;
     }
 
     /*****toString
@@ -38,7 +73,7 @@ public class Cylinder extends Tube implements Geometry {
         return Double.compare(cylinder._height, _height) == 0;
     }
 
-
+//**************************getters********************************//
     /**
      * returns normal
      * @param _other
@@ -61,6 +96,9 @@ public class Cylinder extends Tube implements Geometry {
             return v;
         o = (o.add(v.scale(t))).get_head();
         return o.subtract(_other).normalize();
+    }
+    public double get_height() {
+        return _height;
     }
 }
 

@@ -2,15 +2,18 @@ package elements;
 
 import primitives.Color;
 
-public class AmbientLight {
-    Color _intensity;
-   // Color _iP;
+/**
+ * class to represent AmbientLight
+ */
+public class AmbientLight extends Light {
+    /**
+     * constructor for "mekadmei hanchata" kA and iA
+     * @param iA
+     * @param kA
+     */
     public AmbientLight(Color iA,double kA)
     {
-        _intensity=iA.scale(kA);
+       super(iA.scale(kA));
     }
 
-    public Color get_intensity() {
-       return  _intensity;
-    }
 }

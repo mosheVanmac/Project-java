@@ -1,20 +1,19 @@
 package geometries;
 
-import primitives.Coordinate;
-import primitives.Point3D;
-import primitives.Ray;
-import primitives.Vector;
+import primitives.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import static java.lang.Math.sqrt;
 import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
  * class that represents sphere
  */
-public class Sphere extends RadialGeometry implements Geometry{
+public class Sphere extends RadialGeometry {
     Point3D _center;
 
     /**
@@ -23,8 +22,17 @@ public class Sphere extends RadialGeometry implements Geometry{
      * @param _center
      */
     public Sphere(double _radius, Point3D _center) {
-        super(_radius);
-        this._center = _center;
+this(Color.BLACK,new Material(0,0,0),_radius,_center);
+
+    }
+
+    public Sphere(Color color, Material material,double radius, Point3D point3D) {
+        super(color,material,radius);
+        this._center=point3D;
+    }
+    public Sphere(Material material,double radius,Point3D point3D)
+    {this(Color.BLACK,material,radius,point3D);
+
     }
 
     /**
@@ -34,8 +42,6 @@ public class Sphere extends RadialGeometry implements Geometry{
      */
     public Vector getNormal(Point3D _other){
         return  _center.subtract(_other).normalize();
-        //return  getNormal(new Coordinate(_other.get_x().get()-_center.get_x().get()),
-         //       new Coordinate(_other.get_x().get()));
     }
 
     /**
@@ -54,8 +60,8 @@ public class Sphere extends RadialGeometry implements Geometry{
     }
 
     @Override
-    public List<Point3D> findIntersections(Ray ray) {
-        ArrayList<Point3D> arl=new ArrayList<Point3D>();
+    public LinkedList<Geopoint> findIntersections(Ray ray,double maximumdistance) {
+        LinkedList<Geopoint> arl=new LinkedList<>();
         Point3D p1;
         Point3D p2;
         Vector u = ray.get_p0().subtract(this.get_center());
@@ -67,15 +73,24 @@ public class Sphere extends RadialGeometry implements Geometry{
         double th = sqrt(this.get_radius() * this.get_radius() - d * d);
         double t1 = tm + th;
         double t2 = tm - th;
-        if (t1 >= 0) {
+        double distancetone=alignZero(t1-maximumdistance);
+        double distancettwo=alignZero(t2-maximumdistance);
+        if ((t1 >0)&&(t2>0)&&(distancetone<=0)&&(distancettwo<=0)) {
             p1 = (ray.get_p0().add(ray.get_dir().scale(t1))).get_head();
-            arl.add(p1);
-        }
-        if (t2 >= 0) {
-
+            arl.add(new Geopoint(this,p1));
              p2 = (ray.get_p0().add(ray.get_dir().scale(t2))).get_head();
-             arl.add(p2);
+             arl.add(new Geopoint(this,p2));
         }
         return arl;
     }
+
+public int findNumIntersections(Ray ray,Double maxdistance)
+{int size;
+List<Geopoint> listone=findIntersections(ray);
+if(listone!=null)
+{ size=listone.size();}
+else{size=0;}
+return size;
+
+}
 }

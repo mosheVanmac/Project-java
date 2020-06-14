@@ -11,14 +11,14 @@ import static primitives.Util.isZero;
  */
 public class Vector {
     Point3D _head;
-
     public final static Vector ZERO=new Vector(new Point3D(0.0,0.0,0.0));
     //*********constructors***********************************//
 public Vector(Point3D _head1,Point3D _head2){
     this(_head1.subtract(_head2));
 
 }
-    public Vector(Point3D _head) {
+    public Vector(Point3D _head)
+    {
         try {
             if (_head.get_x().get() == 0.0 && _head.get_y().get() == 0 && _head.get_z().get() == 0)
                 throw new IllegalArgumentException("vector 0 is unacceptable");
@@ -129,23 +129,33 @@ public Vector(Point3D _head1,Point3D _head2){
      * @return double
      */
     public  double lengthSquared(){
-        double len = _head.get_x().get()*_head.get_x().get()+_head.get_y().get()*_head.get_y().get()+_head.get_z().get()*
-                _head.get_z().get(); return len;}
+        return this.dotProduct(this);
+        //double xSquared = alignZero(_head.get_x().get()*_head.get_x().get());
+        //double ySquared=alignZero(_head.get_y().get()*_head.get_y().get());
+        //double zSquared=alignZero(_head.get_z().get()*_head.get_z().get());
+        //double lengthSquared=alignZero(xSquared+ySquared+zSquared);
+        //return lengthSquared;
+    }
 
     /**
      * function calculates length of vector
      * @return double
      */
-    public double length(){return sqrt (lengthSquared());}
+    public double length(){return alignZero(sqrt (lengthSquared()));}
 
     /**
      * function makes "this" into a vector with length of 1
      * @return Vector
      */
-    public Vector normalize(){
-        this._head._x = new Coordinate(alignZero(this._head.get_x().get() / this.length()));
+    public Vector normalize()
+    { try {
+        if(this.length()==0){throw new IllegalArgumentException("length is zero,so normalization is not allowed");}
+            this._head._x = new Coordinate(alignZero(this._head.get_x().get() / this.length()));
             this._head._y =new Coordinate(alignZero(this._head.get_y().get() / this.length()));
-        this._head._z = new Coordinate(alignZero(this._head.get_z().get() / this.length()));
+            this._head._z = new Coordinate(alignZero(this._head.get_z().get() / this.length()));
+
+    }
+        catch(IllegalArgumentException exep){}
           return this;}
 
     /**
@@ -179,8 +189,12 @@ public Vector add(Vector other) {
      */
     public Vector subtract(Vector other)
 { Vector minusThis=this.scale(-1);
-    return new Vector(other.get_head().get_x().get()+minusThis.get_head().get_x().get() ,
-        other.get_head().get_y().get()+minusThis.get_head().get_y().get(),
-        other.get_head().get_z().get()+minusThis.get_head().get_z().get());
+    return new Vector(alignZero(other.get_head().get_x().get()+minusThis.get_head().get_x().get()) ,
+        alignZero(other.get_head().get_y().get()+minusThis.get_head().get_y().get()),
+        alignZero(other.get_head().get_z().get()+minusThis.get_head().get_z().get()));
+    //return new Vector(alignZero(this.get_head().get_x().get()-other.get_head().get_x().get()),
+            //alignZero(this.get_head().get_y().get()-other.get_head().get_y().get()),
+            //alignZero(this.get_head().get_z().get()-other.get_head().get_z().get()));
+
 }
 }

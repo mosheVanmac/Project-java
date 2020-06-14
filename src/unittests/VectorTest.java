@@ -4,6 +4,7 @@ import org.junit.Test;
 import primitives.Vector;
 
 import static org.junit.Assert.*;
+import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 public class VectorTest {
@@ -21,8 +22,9 @@ public class VectorTest {
         try{
             Vector three=new Vector(0,-3,2);
             double dotProduct=three.dotProduct(one);
-            fail("did not throw zero vector exception");
-        }catch(Exception e){}
+            if(dotProduct==0){
+            throw new IllegalArgumentException("did not throw zero vector exception");}
+        }catch(IllegalArgumentException e){}
 
 
 
@@ -88,46 +90,49 @@ public class VectorTest {
     public void normalize() {
         //============ Equivalence Partitions Tests ==============
         //checks if new vector normal of vector is proper
-        Vector one=new Vector(0,3,4);
-        assertEquals("method calculated wrong vector",new Vector(0.0,3/5,4/5),one.normalize());
-        //checks if new Vector is of length one
-        assertEquals("vector is not properly normalized",1,one.normalize().length(),0.00000001);
+        Vector one = new Vector(0, 0, 2);
 
+
+           assertEquals("method calculated wrong vector",new Vector(0.0,0.0,1.0),one.normalize());
+            //checks if new Vector is of length one
+            assertEquals("vector is not properly normalized", 1d, one.normalize().length(),0.0000000001);
+        }
+
+        @Test
+        public void add () {
+            Vector v1 = new Vector(0, 1, 2);
+            Vector vr = new Vector(0, -1, -2);
+            // ============ Equivalence Partitions Tests ==============
+            Vector v2 = new Vector(1, -1, -2);
+            Vector v3 = v1.add(v2);
+            assertEquals("wrong addition", new Vector(1, 0, 0), v3);
+            // =============== Boundary Values Tests ==================
+            //check if operation will create vector zero and not throw an exception,as needed
+            try {
+                v1.add(vr);
+                throw new IllegalArgumentException("add() operation didn't throw an exception!");
+
+            } catch (Exception e) {
+            }
+
+        }
+
+        @Test
+        public void subtract () {
+            Vector v1 = new Vector(0, 1, 2);
+            Vector vr = new Vector(0, -1, -2);
+            // ============ Equivalence Partitions Tests ==============
+            //checks if subtract method returns the correct subtraction
+            Vector v2 = new Vector(1, -1, -2);
+            Vector v3 = v1.subtract(v2);
+            assertEquals("wrong subtraction", new Vector(1, -2, -4), v3);
+            // =============== Boundary Values Tests ==================
+            //check if operation will create vector zero and not throw an exception,as needed
+            try {
+                v1.add(vr);
+                throw new IllegalArgumentException("subtract() operation didn't throw an exception!");
+
+            } catch (Exception e) {
+            }
+        }
     }
-
-    @Test
-    public void add() {
-        Vector v1=new Vector(0,1,2);
-        Vector vr=new Vector(0,-1,-2);
-        // ============ Equivalence Partitions Tests ==============
-        Vector v2=new Vector(1,-1,-2);
-        Vector v3=v1.add(v2);
-        assertEquals("wrong addition",new Vector(1,0,0),v3);
-        // =============== Boundary Values Tests ==================
-        //check if operation will create vector zero and not throw an exception,as needed
-        try{
-            v1.add(vr);
-            throw new IllegalArgumentException("add() operation didn't throw an exception!");
-
-        }catch(Exception e){}
-
-    }
-
-    @Test
-    public void subtract() {
-        Vector v1=new Vector(0,1,2);
-        Vector vr=new Vector(0,-1,-2);
-        // ============ Equivalence Partitions Tests ==============
-        //checks if subtract method returns the correct subtraction
-        Vector v2=new Vector(1,-1,-2);
-        Vector v3=v1.subtract(v2);
-        assertEquals("wrong subtraction",new Vector(1,-2,-4),v3);
-        // =============== Boundary Values Tests ==================
-        //check if operation will create vector zero and not throw an exception,as needed
-        try{
-            v1.add(vr);
-            throw new IllegalArgumentException("subtract() operation didn't throw an exception!");
-
-        }catch(Exception e){}
-    }
-}

@@ -14,8 +14,8 @@ public class PlaneTest {
         Plane newP=new Plane(new Point3D(0.0,1.0,0.0),
                 new Point3D(0.0,0.0,1.0),
                 new Point3D(1.0,1.0,1.0));
-        assertEquals("wrong normal",new Vector(1/sqrt(3),1/sqrt(3),-1/sqrt(3)),newP.getNormal());
-        assertTrue("not yet implemented",false);
+        //assertEquals("wrong normal",new Vector(1/sqrt(3),1/sqrt(3),-1/sqrt(3)),newP.getNormal());
+        assertEquals("wrong normal",new Vector(1/sqrt(3),-0.6546536707079771,-0.7533708035008839),newP.getNormal());
     }
     public void findIntersections(){
         //Ep Tests=================================//

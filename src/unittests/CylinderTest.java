@@ -8,7 +8,7 @@ import primitives.Vector;
 import static org.junit.Assert.*;
 
 /**
- * checks whether getnormal of cylinder works properly
+ * checks whether get normal of cylinder works properly
  */
 public class CylinderTest {
     @Test

@@ -1,19 +1,19 @@
 package geometries;
 
-import primitives.Point3D;
-import primitives.Ray;
-import primitives.Vector;
+import primitives.*;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 /**
- * class to represent tube
+ * class to represent tube in a 3d environment
  */
-public class Tube extends RadialGeometry implements Geometry {
+public class Tube extends RadialGeometry
+{
     Ray _axisRay;
 
     /**
@@ -23,8 +23,18 @@ public class Tube extends RadialGeometry implements Geometry {
      * @param _axisRay
      */
     public Tube(double _radius, Ray _axisRay) {
-        super(_radius);
-        this._axisRay = _axisRay;
+        this(Color.BLACK,new Material(0,0,0),_radius,_axisRay);
+
+    }
+    public Tube(Material material,double _radius,Ray _axisRay)
+    {
+        this(Color.BLACK,material,_radius,_axisRay);
+
+    }
+    public Tube(Color color, Material material, double _radius, Ray _axisRay)
+    {
+        super(color,material,_radius);
+        this._axisRay=_axisRay;
     }
 
     @Override
@@ -52,30 +62,23 @@ public class Tube extends RadialGeometry implements Geometry {
      * @param point
      * @return Vector
      */
-    public Vector getNormal(Point3D point) {
-
-        //The vector from the point of the cylinder to the given point
+    public Vector getNormal(Point3D point)
+    {
         Point3D p0 = _axisRay.get_p0();
         Vector v = _axisRay.get_dir();
-        double t=v.dotProduct(p0.subtract(point));
-        //We need the projection to multiply the _direction unit vector
-        Vector vector1 = p0.subtract(point);
-
+        double t=alignZero((point.subtract(p0)).dotProduct(v));//before p0 subtract point
+        //Vector vector1 = (point.subtract(p0));//same
         if (!isZero(t)) {
-            // projection of P-O on the ray:
             p0=(p0.add(v.scale(t))).get_head();
         }
-
-        //This vector is orthogonal to the _direction vector.
-        Vector check = p0.subtract(point);
+        Vector check = point.subtract(p0);//same
         return check.normalize();
     }
-
     @Override
     public String toString() {
         return "ray: " + _axisRay +
                 ", radius: " + _radius;
     }
-    public ArrayList<Point3D> findIntersections(Ray ray){return null;}
+    public LinkedList<Geopoint> findIntersections(Ray ray,double maxdistance){return null;}
 }
 

@@ -45,11 +45,6 @@ public class GeometriesTests {
         assertEquals("two objects intersected",
                 m.l1.size()==3,
                 m.findIntersections(new Ray(new Point3D(0.86,-7.05,-0.59),new Vector(-2.71,6.09,2.31))));
-
-
-
-
-
     }
 
 }

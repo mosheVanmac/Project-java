@@ -1,6 +1,7 @@
 package geometries;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import primitives.*;
 import static primitives.Util.*;
@@ -11,7 +12,7 @@ import static primitives.Util.*;
  *
  * @author Dan
  */
-public class Polygon implements Geometry {
+public class Polygon extends Geometry {
     /**
      * List of polygon's vertices
      */
@@ -42,7 +43,12 @@ public class Polygon implements Geometry {
      *                                  <li>The polygon is concave (not convex></li>
      *                                  </ul>
      */
-    public Polygon(Point3D... vertices) {
+    public Polygon (Point3D...vertices){
+        this(Color.BLACK,new Material(0,0,0),vertices);
+    }
+
+    public Polygon(Color color,Material material,Point3D... vertices) {
+        super(color,material);
         if (vertices.length < 3)
             throw new IllegalArgumentException("A polygon can't have less than 3 vertices");
         _vertices = List.of(vertices);
@@ -81,6 +87,7 @@ public class Polygon implements Geometry {
         }
     }
 
+
     @Override
     public Vector getNormal(Point3D point) {
         return _plane.getNormal();
@@ -89,10 +96,32 @@ public class Polygon implements Geometry {
     public List<Point3D> get_vertices() {
         return _vertices;
     }
-    public ArrayList<Point3D> findIntersections(Ray ray)
-    {return null;}
-}
 
+    public LinkedList<Geopoint> findIntersections(Ray ray,double maximumdistance)
+    {List<Geopoint>planelist=_plane.findIntersections(ray);
+    if(planelist==null){return null;}
+     Point3D pointRay=ray.get_p0();
+     Vector direction=ray.get_dir();
+      Vector one=_vertices.get(1).subtract(pointRay);
+      Vector two=_vertices.get(0).subtract(pointRay);
+      if(isZero(direction.dotProduct(one.crossProduct(two).normalized())))
+      {
+        return null;}
+      int i=_vertices.size();
+      while(i>0){
+          one=two;
+          two=_vertices.get(i).subtract(pointRay);
+          if(isZero(alignZero(direction.dotProduct(one.crossProduct(two).normalized())))||
+                  (alignZero(direction.dotProduct(one.crossProduct(two).normalized()))<0)
+          )
+                  {return null;}
+          --i;
+      }
+        LinkedList<Geopoint> geoList=new LinkedList<Geopoint>();
+      for(Geopoint geo:planelist){geoList.add(new Geopoint(this,geo.getPoint()));}
+          return geoList;
+      }
+}
 
 
 
